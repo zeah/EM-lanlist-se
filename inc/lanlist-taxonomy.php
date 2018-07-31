@@ -3,7 +3,7 @@ defined( 'ABSPATH' ) or die( 'Blank Space' );
 /*
 	REGISTERING TAXONOMY
 */
-final class Emlanlist_taxonomy {
+final class Lanlist_taxonomy {
 	/* singleton */
 	private static $instance = null;
 	public static function get_instance() {

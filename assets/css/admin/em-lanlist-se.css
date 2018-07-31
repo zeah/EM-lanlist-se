@@ -1,0 +1,13 @@
+.emlanlistse-meta-container input {
+	width: 300px;
+	margin: 0 10px 10px 0;
+}
+
+.emlanlistse-info-container {
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.emlanlistse-input-title {
+	font-size: 16px;
+}

@@ -4,7 +4,7 @@ defined('ABSPATH') or die('Blank Space');
 
 /*
 */
-final class Emlanlist_edit {
+final class Lanlist_edit {
 	/* singleton */
 	private static $instance = null;
 
@@ -19,9 +19,9 @@ final class Emlanlist_edit {
 	private function __construct() {
 
 
-		// add_action('manage_emkort_posts_columns', array($this, 'column_head'));
-		// add_filter('manage_emkort_posts_custom_column', array($this, 'custom_column'));
-		// add_filter('manage_edit-emkort_sortable_columns', array($this, 'sort_column'));
+		add_action('manage_emlanlistse_posts_columns', array($this, 'column_head'));
+		add_filter('manage_emlanlistse_posts_custom_column', array($this, 'custom_column'));
+		add_filter('manage_edit-emlanlistse_sortable_columns', array($this, 'sort_column'));
 		
 		/* metabox, javascript */
 		add_action('add_meta_boxes_emlanlistse', array($this, 'create_meta'));
@@ -30,29 +30,29 @@ final class Emlanlist_edit {
 	}
 
 
-	// public function column_head($defaults) {
-	// 	$defaults['emkort_sort'] = 'Sorting Order';
-	// 	$defaults['make_list'] = 'Make List';
-	// 	return $defaults;
-	// }
+	public function column_head($defaults) {
+		$defaults['emlanlistse_sort'] = 'Sorting Order';
+		// $defaults['make_list'] = 'Make List';
+		return $defaults;
+	}
 
 
-	// public function custom_column($column_name) {
-	// 	global $post;
-	// 	if ($column_name == 'emkort_sort') {
-	// 		$meta = get_post_meta($post->ID, 'emkort_sort');
-	// 		if (isset($meta[0]))
-	// 			echo $meta[0];
-	// 	}
-	// 	if ($column_name == 'make_list')
-	// 		echo '<button type="button" class="emkort-button button" data="'.$post->post_name.'">Add</button>';
-	// }
+	public function custom_column($column_name) {
+		global $post;
+		if ($column_name == 'emlanlistse_sort') {
+			$meta = get_post_meta($post->ID, 'emlanlistse_sort');
+			if (isset($meta[0]))
+				echo $meta[0];
+		}
+		// if ($column_name == 'make_list')
+		// 	echo '<button type="button" class="emkort-button button" data="'.$post->post_name.'">Add</button>';
+	}
 
 
-	// public function sort_column($columns) {
-	// 	$columns['emkort_sort'] = 'emkort_sort';
-	// 	return $columns;
-	// }
+	public function sort_column($columns) {
+		$columns['emlanlistse_sort'] = 'emlanlistse_sort';
+		return $columns;
+	}
 
 
 
@@ -68,6 +68,14 @@ final class Emlanlist_edit {
 			'Lån Info', // title 
 			array($this,'create_meta_box'), // callback
 			'emlanlistse' // page
+		);
+
+		add_meta_box(
+			'emalanlistse_exclude',
+			'Aldri vis',
+			array($this, 'exclude_meta_box'),
+			'emlanlistse',
+			'side'
 		);
 
 		wp_enqueue_style('em-lanlist-se-admin-style', LANLIST_SE_PLUGIN_URL . '/assets/css/admin/em-lanlist-se.css', array(), false);
@@ -92,7 +100,12 @@ final class Emlanlist_edit {
 		echo '<div class="emlanlistse-meta-container"></div>';
 	}
  
+	public function exclude_meta_box() {
+		$option = get_option('emlanlistse_exclude');
+		global $post;
 
+		echo '<input name="emlanlistse_exclude" id="emlanlistse_exc" type="checkbox"'.(array_search($post->ID, $option) !== false ? ' checked' : '').'><label for="emlanlistse_exc">Lån vil ikke vises på front-end når boksen er markert.</label>';
+	}
 
 	public function save($post_id) {
 		// post type is emlanlistse
@@ -110,9 +123,32 @@ final class Emlanlist_edit {
 		// nonce is checked
 		if (!wp_verify_nonce($_POST['emlanlistse_nonce'], 'em'.basename(__FILE__))) return;
 
+		if (isset($_POST['emlanlistse_exclude'])) {
+			$option = get_option('emlanlistse_exclude');
+
+			if (array_search($post_id, $option) === false) {
+
+				if (is_array($option)) {
+					array_push($option, intval($post_id));
+
+					update_option('emlanlistse_exclude', $option);
+				}
+				else update_option('emlanlistse_exclude', [$post_id]);
+			}
+		}
+		else {
+			$option = get_option('emlanlistse_exclude');
+
+			if (array_search($post_id, $option) !== false) {
+				unset($option[array_search($post_id, $option)]);
+				update_option('emlanlistse_exclude', $option);
+			}
+		}
+
 		// data is sent, then sanitized and saved
 		if (isset($_POST['emlanlistse_data'])) update_post_meta($post_id, 'emlanlistse_data', $this->sanitize($_POST['emlanlistse_data']));
-		if (isset($_POST['emlanlistse_sort'])) update_post_meta($post_id, 'emlanlistse_sort', $this->sanitize($_POST['emlanlistse_sort']));
+		if (isset($_POST['emlanlistse_sort'])) update_post_meta($post_id, 'emlanlistse_sort', floatval($_POST['emlanlistse_sort']));
+		// if (isset($_POST['emlanlistse_sort'])) update_post_meta($post_id, 'emlanlistse_sort', $this->sanitize($_POST['emlanlistse_sort']));
 	}
 
 

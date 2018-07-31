@@ -17,8 +17,8 @@ final class Lanlist_posttype {
 	}
 
 	private function __construct() {
-		Emlanlist_edit::get_instance();
-		Emlanlist_taxonomy::get_instance();
+		Lanlist_edit::get_instance();
+		// Lanlist_taxonomy::get_instance();
 		/* creates taxonomy */
 		// Emkk_taxonomy::get_instance();
 		/* page edit screen */

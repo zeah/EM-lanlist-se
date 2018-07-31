@@ -19,6 +19,7 @@ require_once 'inc/lanlist-shortcode.php';
 function init_emlanlistse() {
 
 	Lanlist_posttype::get_instance();
+	Lanlist_shortcode::get_instance();
 
 }
 add_action('plugins_loaded', 'init_emlanlistse');

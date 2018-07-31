@@ -45,21 +45,55 @@
 		return container;
 	}
 
+	let dicedropdown = (o = {}) => {
+		let container = document.createElement('div');
+
+		let input = document.createElement('select');
+		input.setAttribute('name', 'emlanlistse_data[terning]');
+
+		container.appendChild(newdiv({class: 'emlanlistse-input-title', text: 'Terningkast'}));
+
+		let addOption = (o = {}) => {
+			let option = document.createElement('option');
+			option.setAttribute('value', o.value);
+			if (o.value == emlanlistse_meta.meta.terning) option.setAttribute('selected', '');
+			option.appendChild(document.createTextNode(o.value));
+			return option;
+		}
+
+		input.appendChild(addOption({value: 'ingen'}));
+		input.appendChild(addOption({value: 'en'}));
+		input.appendChild(addOption({value: 'to'}));
+		input.appendChild(addOption({value: 'tre'}));
+		input.appendChild(addOption({value: 'fire'}));
+		input.appendChild(addOption({value: 'fem'}));
+		input.appendChild(addOption({value: 'seks'}));
+
+		container.appendChild(input);
+
+		return container; 
+	}
+
 	container.appendChild(newinput({name: 'emlanlistse_sort', title: 'Sortering', notData: true, sort: true}));
 
 	container.appendChild(newinput({name: 'readmore', title: 'Read More Link'}));
 
 	container.appendChild(newinput({name: 'bestill', title: 'Bestill Link'}));
+	container.appendChild(newinput({name: 'bestill_text', title: 'Bestill Text (under bestillknapp)'}));
 
-	container.appendChild(newinput({name: 'info01', title: 'Text 01'}));
-	container.appendChild(newinput({name: 'info02', title: 'Text 02'}));
-	container.appendChild(newinput({name: 'info03', title: 'Text 03'}));
-	container.appendChild(newinput({name: 'info04', title: 'Text 04'}));
-	container.appendChild(newinput({name: 'info05', title: 'Text 05'}));
-	container.appendChild(newinput({name: 'info06', title: 'Text 06'}));
-	container.appendChild(newinput({name: 'info07', title: 'Text 07'}));
-	container.appendChild(newinput({name: 'info08', title: 'Text 08'}));
+	let info_container = newdiv({class: 'emlanlistse-info-container'});
 
+	info_container.appendChild(newinput({name: 'info01', title: 'Text 01'}));
+	info_container.appendChild(newinput({name: 'info05', title: 'Text 05'}));
+	info_container.appendChild(newinput({name: 'info02', title: 'Text 02'}));
+	info_container.appendChild(newinput({name: 'info06', title: 'Text 06'}));
+	info_container.appendChild(newinput({name: 'info03', title: 'Text 03'}));
+	info_container.appendChild(newinput({name: 'info07', title: 'Text 07'}));
+	info_container.appendChild(newinput({name: 'info04', title: 'Text 04'}));
+	info_container.appendChild(newinput({name: 'info08', title: 'Text 08'}));
 
+	container.appendChild(info_container);
+
+	container.appendChild(dicedropdown());
 
 })();
