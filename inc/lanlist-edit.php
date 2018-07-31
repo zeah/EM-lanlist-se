@@ -30,29 +30,29 @@ final class Emlanlist_edit {
 	}
 
 
-	public function column_head($defaults) {
-		$defaults['emkort_sort'] = 'Sorting Order';
-		$defaults['make_list'] = 'Make List';
-		return $defaults;
-	}
+	// public function column_head($defaults) {
+	// 	$defaults['emkort_sort'] = 'Sorting Order';
+	// 	$defaults['make_list'] = 'Make List';
+	// 	return $defaults;
+	// }
 
 
-	public function custom_column($column_name) {
-		global $post;
-		if ($column_name == 'emkort_sort') {
-			$meta = get_post_meta($post->ID, 'emkort_sort');
-			if (isset($meta[0]))
-				echo $meta[0];
-		}
-		if ($column_name == 'make_list')
-			echo '<button type="button" class="emkort-button button" data="'.$post->post_name.'">Add</button>';
-	}
+	// public function custom_column($column_name) {
+	// 	global $post;
+	// 	if ($column_name == 'emkort_sort') {
+	// 		$meta = get_post_meta($post->ID, 'emkort_sort');
+	// 		if (isset($meta[0]))
+	// 			echo $meta[0];
+	// 	}
+	// 	if ($column_name == 'make_list')
+	// 		echo '<button type="button" class="emkort-button button" data="'.$post->post_name.'">Add</button>';
+	// }
 
 
-	public function sort_column($columns) {
-		$columns['emkort_sort'] = 'emkort_sort';
-		return $columns;
-	}
+	// public function sort_column($columns) {
+	// 	$columns['emkort_sort'] = 'emkort_sort';
+	// 	return $columns;
+	// }
 
 
 
@@ -81,14 +81,14 @@ final class Emlanlist_edit {
 
 		$meta = get_post_meta($post->ID, 'emlanlistse_data');
 		$sort = get_post_meta($post->ID, 'emlanlistse_sort');
-
+		// wp_die('<xmp>'.print_r($sort, true).'</xmp>');
+		
 		$json = [
 			'meta' => isset($meta[0]) ? $this->sanitize($meta[0]) : '',
-			'sort' => isset($sort) ? $this->sanitize($sort) : ''
+			'sort' => isset($sort[0]) ? floatval($sort[0]) : ''
 		];
 
-
-		wp_localize_script( 'em-lanlist-se-admin', 'emlanlistse-meta', json_decode(json_encode($json), true));
+		wp_localize_script('em-lanlist-se-admin', 'emlanlistse_meta', json_decode(json_encode($json), true));
 		echo '<div class="emlanlistse-meta-container"></div>';
 	}
  
@@ -120,7 +120,7 @@ final class Emlanlist_edit {
 		recursive sanitizer
 	*/
 	private function sanitize($data) {
-		if (!is_array($data)) return sanitize_text_field($data);
+		if (!is_array($data)) return wp_kses_post($data);
 
 		$d = [];
 		foreach($data as $key => $value)
