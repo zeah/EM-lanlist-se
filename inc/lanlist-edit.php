@@ -27,8 +27,46 @@ final class Lanlist_edit {
 		add_action('add_meta_boxes_emlanlistse', array($this, 'create_meta'));
 		/* hook for page saving/updating */
 		add_action('save_post', array($this, 'save'));
+
+
+		add_filter('emtheme_doc', array($this, 'add_doc'), 99);
+
 	}
 
+	public function add_doc($data) {
+
+		$data['emlanlistse']['title'] = '<h1 id="emlanlistse">Lånlist Sverige (Plugin)</h1>';
+
+		$data['emlanlistse']['index'] = '<li><h2><a href="#emlanlistse">Lånlist Sverige (Plugin)</a></h2>
+											<ul>
+												<li><a href="#emlanlistse-shortcode">Shortcode</a></li>
+												<li><a href="#emlanlistse-aldri">Aldri vis</a></li>
+												<li><a href="#emlanlistse-sort">Sorting order</a></li>
+											</ul>
+										</li>';
+		$data['emlanlistse']['info'] = '<li id="emlanlistse-shortcode"><h2>Shortcodes</h2>
+										<ul>
+											<li><b>[lan]</b>
+											<p>[lan] will show all.</p>
+											</li>
+											<li><b>[lan name="xx, yy"]</b>
+											<p>Shows only the loans that is mentioned in the shortcode.
+											<br>The name needs to be the slug-name of the loan.
+											<br>eks.: [lan name="lendo-privatlan"] will only show the loan with slug-name "lendo-privatlån.
+											<br>[lan name="lendo-privatlan, axo-finans"] will show 2 loans: lendo and axo.</p>
+											</li>
+										</ul>
+										</li>
+										<li id="emlanlistse-aldri"><h2>Aldri vis</h2>
+										<p>If tagged, then the loan will never appear on the front-end.</p>
+										</li>
+										</li>
+										<li id="emlanlistse-sort"><h2>Sorting order</h2>
+										<p>The loans will be shown with the highest "Sort"-value first.</p>
+										</li>';
+
+		return $data;
+	}
 
 	public function column_head($defaults) {
 		$defaults['emlanlistse_sort'] = 'Sorting Order';
