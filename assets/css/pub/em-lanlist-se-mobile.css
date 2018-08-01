@@ -1,0 +1,161 @@
+
+.emlanlist-ul {
+	padding: 0;
+	margin: 0;
+
+	/*display: flex;*/
+}
+
+.emlanlist-container {
+	list-style: none;
+
+	display: flex;
+
+	flex-direction: column;
+
+	font-size: 1.6rem;
+
+	margin-bottom: 2rem;
+
+}
+
+
+.emlanlist-container:nth-child(odd) {
+	background-color: #eee;
+}
+
+@media only screen and (min-width: 710px) {
+
+	.emlanlist-ul {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.emlanlist-container {
+		width: 50%;
+		margin-bottom: 0;
+		padding-top: 1rem;
+	}
+	.emlanlist-container:nth-child(odd) {
+		background-color: inherit;
+	}
+
+	.emlanlist-container:nth-child(4n) {
+		background-color: #eee;
+	}
+
+	.emlanlist-container:nth-child(4n+1) {
+		background-color: #eee;
+	}
+
+	
+} 
+
+.emlanlist-title-container {
+	margin: 0.5rem 0;
+}
+
+.emlanlist-title {
+	font-size: 2rem;
+	text-decoration: none;
+	color: #000;
+}
+
+.emlanlist-title-container,
+.emlanlist-terning,
+.emlanlist-bestill-container,
+.emlanlist-logo-container {
+	align-self: center;
+}
+
+.emlanlist-title,
+.emlanlist-info-fem,
+.emlanlist-info-en {
+	font-weight: 700;
+}
+
+.emlanlist-info-fem:before,
+.emlanlist-info-seks:before,
+.emlanlist-info-syv:before,
+.emlanlist-info-atte:before {
+	content: '\2022	';
+	color: gold;
+	text-shadow: 0 0 1px black;
+	font-size: 2rem;
+	margin-right: 0.5rem;
+
+	/*margin-bottom: 1.5rem;*/
+}
+
+.emlanlist-info-container,
+.emlanlist-list-container {
+	/*margin: 1.5rem 0;*/
+	margin: 0 6rem;
+}
+
+.emlanlist-info-container {
+	margin-top: 3rem;
+	margin-bottom: 3rem;
+}
+
+.emlanlist-list-container {
+	margin-bottom: 3rem;
+}
+
+.emlanlist-info-fem,
+.emlanlist-info-seks,
+.emlanlist-info-syv,
+.emlanlist-info-atte {
+	margin-bottom: 1rem;
+}
+
+.emlanlist-terning {
+	width: 50px;
+	height: 50px;
+}
+
+/* dice dimensions */
+.rect-svg {
+	height: 50px;
+	width: 50px;
+}
+
+/* dice eye color */
+.circle-svg {
+	fill: #ffffff;
+}
+
+.emlanlist-bestill-container {
+	margin: 2rem 0;
+}
+.emlanlist-bestill {
+	display: flex;
+	justify-content: center;
+}
+
+.emlanlist-bestilltext {
+	margin-top: 1rem;
+	text-align: center;
+}
+
+.emlanlist-link {
+	padding: 1rem 2rem;
+
+	background-image: linear-gradient(hsl(120, 70%, 60%) 0%, hsl(120, 70%, 50%) 100%);
+	border: solid 1px hsl(120, 50%, 60%);
+	border-radius: 5px;
+
+	font-size: 2.2rem;
+	font-weight: 700;
+	color: #fff;
+	text-shadow: 0 0 2px #000;
+	font-family: arial;
+	text-decoration: none;
+}
+
+.emlanlist-svg {
+	filter: drop-shadow(1px 1px 1px #333);
+}
+
+.emlanlist-thumb {
+	fill: #fff;
+}

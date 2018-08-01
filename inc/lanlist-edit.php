@@ -142,6 +142,10 @@ final class Lanlist_edit {
 		$option = get_option('emlanlistse_exclude');
 		global $post;
 
+		if (!is_array($option)) $option = [];
+		// echo 'hi'.print_r($option, true);
+
+
 		echo '<input name="emlanlistse_exclude" id="emlanlistse_exc" type="checkbox"'.(array_search($post->ID, $option) !== false ? ' checked' : '').'><label for="emlanlistse_exc">Lån vil ikke vises på front-end når boksen er markert.</label>';
 	}
 
@@ -163,6 +167,8 @@ final class Lanlist_edit {
 
 		if (isset($_POST['emlanlistse_exclude'])) {
 			$option = get_option('emlanlistse_exclude');
+
+			if (!is_array($option)) $option = [];
 
 			if (array_search($post_id, $option) === false) {
 

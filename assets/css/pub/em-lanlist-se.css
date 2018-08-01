@@ -6,13 +6,13 @@
 .emlanlist-container {
 	display: grid;
 
-	grid-template-columns: 18rem 1fr 1fr 15rem 20rem;
-	grid-template-rows: auto auto;
+	grid-template-columns: 20rem 1fr 1fr 15rem 20rem;
+	grid-template-rows: 2.5rem auto;
 	/*grid-template-rows: 1fr 1fr 1fr 1fr;*/
 
 	grid-template-areas: 
 	/*"title infoC infoL terning bestillc"*/
-	"title title title . ."
+	"title infoC infoL terning bestillc"
 	"logo infoC infoL terning bestillc";
 	/*"logo infoC infoL terning bestilltext";*/
 	/*"logo infoC infoL terning bestilltext";*/
@@ -23,13 +23,14 @@
 	"logo infotre infosyv terning bestilltext"
 	"logo infofire infoatte terning bestilltext";
 */
-	padding: 1rem;
+	padding: 2rem 1rem 1rem 1rem;
+	/*padding: 1rem;*/
 
 	border-bottom: solid 1px #aaa;
 
 	font-size: 1.4rem;
 
-	height: 16rem;
+	/*height: 16rem;*/
 }
 
 .emlanlist-container:nth-child(odd) {
@@ -42,18 +43,20 @@
 
 .emlanlist-title,
 .emlanlist-info-en,
-.emlanlist-info-fem,
-.emlanlist-bestilltext {
+.emlanlist-info-fem {
+/*.emlanlist-bestilltext {*/
 	font-weight: 700;
 }
 
 .emlanlist-title-container {
 	grid-area: title;
+	/*margin-bottom: 0.4rem;*/
 	
 }
 
 .emlanlist-title {
 
+	font-size: 1.6rem;
 	color: #000;
 }
 
@@ -103,6 +106,11 @@
 	grid-area: infofire;
 }
 
+.emlanlist-info-fire,
+.emlanlist-info-atte {
+	/*margin-bottom: 0;*/
+}
+
 .emlanlist-info-fem,
 .emlanlist-info-seks,
 .emlanlist-info-syv,
@@ -134,7 +142,10 @@
 	grid-area: terning;
 
 	justify-self: center;
-	/*align-self: center;*/
+	align-self: center;
+	/*margin-top: 2rem;*/
+	margin-bottom: 0.5rem;
+
 	width: 50px;
 	height: 50px;
 
@@ -150,10 +161,17 @@
 	fill: #ffffff;
 }
 
+
+.emlanlist-bestill-container,
+.emlanlist-terning {
+	/*margin-top: 1rem;*/
+}
+
 .emlanlist-bestill-container {
 	grid-area: bestillc;
 	/*margin-top: 3rem;*/
-
+	align-self: center;
+	margin-top: 1.6rem;
 	/*align-self: center;*/
 }
 
@@ -169,7 +187,12 @@
 .emlanlist-link {
 	padding: 1rem 2rem;
 
-	background-color: #66B22C;
+	/*background-color: #66B22C;*/
+	background-image: linear-gradient(hsl(120, 70%, 60%) 0%, hsl(120, 70%, 50%) 100%);
+	/*background-image: linear-gradient(rgb(156, 241, 92) 0%, rgb(115, 197, 77) 100%);*/
+	border: solid 1px hsl(120, 50%, 60%);
+	/*border: solid 1px #60AE40;*/
+	border-radius: 5px;
 
 	font-size: 2.2rem;
 	font-weight: 700;
@@ -193,6 +216,61 @@
 	grid-area: bestilltext;
 
 	/*align-self: top;*/
-
+	margin-top: 0.5rem;
 	text-align: center;
+}
+
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+	.emlanlist-container {
+		display: -ms-grid;
+
+		-ms-grid-columns: 20rem 1fr 1fr 15rem 20rem;
+		-ms-grid-rows: 2.5rem auto;
+	}
+
+	.emlanlist-title-container {
+		-ms-grid-row: 1;
+		-ms-grid-column: 1;
+	}
+
+	.emlanlist-logo-container {
+		-ms-grid-column: 1;
+		-ms-grid-row: 2;
+
+	}
+
+	.emlanlist-info-container {
+		-ms-grid-row: 1;
+		-ms-grid-column: 2;
+		-ms-grid-row-span: 2;
+
+	}
+
+	.emlanlist-list-container {
+		-ms-grid-row: 1;
+		-ms-grid-column: 3;
+		-ms-grid-row-span: 2;
+
+	}
+
+	.emlanlist-terning {
+		-ms-grid-row: 1;
+		-ms-grid-column: 4;
+		-ms-grid-row-span: 2;
+		background-color: red;
+
+		margin-top: 1.8rem;
+
+	}
+
+	.emlanlist-bestill-container {
+		-ms-grid-row: 1;
+		-ms-grid-column: 5;
+		-ms-grid-row-span: 2;
+
+	}
+
+
 }
