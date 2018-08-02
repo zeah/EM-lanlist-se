@@ -33,8 +33,12 @@ final class Lanlist_edit {
 
 	}
 
+	/**
+	 * theme filter for populating documentation
+	 * 	
+	 * @param [array] $data [array passing through theme filter]
+	 */
 	public function add_doc($data) {
-
 		$data['emlanlistse']['title'] = '<h1 id="emlanlistse">Lånlist Sverige (Plugin)</h1>';
 
 		$data['emlanlistse']['index'] = '<li><h2><a href="#emlanlistse">Lånlist Sverige (Plugin)</a></h2>
@@ -72,25 +76,41 @@ final class Lanlist_edit {
 		return $data;
 	}
 
+	/**
+	 * wp filter for adding columns on ctp list page
+	 * 
+	 * @param  [array] $defaults [array going through wp filter]
+	 * @return [array]           [array going through wp filter]
+	 */
 	public function column_head($defaults) {
 		$defaults['emlanlistse_sort'] = 'Sorting Order';
-		// $defaults['make_list'] = 'Make List';
 		return $defaults;
 	}
 
 
+	/**
+	 * filter for populating columns on ctp list page
+	 * 
+	 * @param  [array] $defaults [array going through wp filter]
+	 * @return [array]           [array going through wp filter]
+	 */
 	public function custom_column($column_name) {
 		global $post;
+
 		if ($column_name == 'emlanlistse_sort') {
 			$meta = get_post_meta($post->ID, 'emlanlistse_sort');
-			if (isset($meta[0]))
-				echo $meta[0];
+			
+			if (isset($meta[0])) echo $meta[0];
 		}
-		// if ($column_name == 'make_list')
-		// 	echo '<button type="button" class="emkort-button button" data="'.$post->post_name.'">Add</button>';
 	}
 
 
+	/**
+	 * filter for sorting by columns on ctp list page
+	 * 
+	 * @param  [array] $defaults [array going through wp filter]
+	 * @return [array]           [array going through wp filter]
+	 */
 	public function sort_column($columns) {
 		$columns['emlanlistse_sort'] = 'emlanlistse_sort';
 		return $columns;
@@ -104,7 +124,7 @@ final class Lanlist_edit {
 	*/
 	public function create_meta() {
 
-		/* kredittkort info meta */
+		/* lan info meta */
 		add_meta_box(
 			'emlanlistse_meta', // name
 			'Lån Info', // title 
@@ -112,6 +132,7 @@ final class Lanlist_edit {
 			'emlanlistse' // page
 		);
 
+		/* to show or not on front-end */
 		add_meta_box(
 			'emalanlistse_exclude',
 			'Aldri vis',
@@ -119,10 +140,13 @@ final class Lanlist_edit {
 			'emlanlistse',
 			'side'
 		);
-
+		
+		/* adding admin css and js */
 		wp_enqueue_style('em-lanlist-se-admin-style', LANLIST_SE_PLUGIN_URL . '/assets/css/admin/em-lanlist-se.css', array(), false);
 		wp_enqueue_script('em-lanlist-se-admin', LANLIST_SE_PLUGIN_URL . '/assets/js/admin/em-lanlist-se.js', array(), false, true);
 	}
+
+
 	/*
 		creates content in metabox
 	*/
@@ -131,7 +155,6 @@ final class Lanlist_edit {
 
 		$meta = get_post_meta($post->ID, 'emlanlistse_data');
 		$sort = get_post_meta($post->ID, 'emlanlistse_sort');
-		// wp_die('<xmp>'.print_r($sort, true).'</xmp>');
 		
 		$json = [
 			'meta' => isset($meta[0]) ? $this->sanitize($meta[0]) : '',
@@ -142,6 +165,10 @@ final class Lanlist_edit {
 		echo '<div class="emlanlistse-meta-container"></div>';
 	}
  
+
+ 	/**
+ 	 * [exclude_meta_box description]
+ 	 */
 	public function exclude_meta_box() {
 		$option = get_option('emlanlistse_exclude');
 		global $post;
@@ -153,6 +180,11 @@ final class Lanlist_edit {
 		echo '<input name="emlanlistse_exclude" id="emlanlistse_exc" type="checkbox"'.(array_search($post->ID, $option) !== false ? ' checked' : '').'><label for="emlanlistse_exc">Lån vil ikke vises på front-end når boksen er markert.</label>';
 	}
 
+
+
+	/**
+	 * wp action when saving
+	 */
 	public function save($post_id) {
 		// post type is emlanlistse
 		if (!get_post_type($post_id) == 'emlanlistse') return;
@@ -169,21 +201,29 @@ final class Lanlist_edit {
 		// nonce is checked
 		if (!wp_verify_nonce($_POST['emlanlistse_nonce'], 'em'.basename(__FILE__))) return;
 
+		// saves to wp option instead of post meta
+		// when adding
 		if (isset($_POST['emlanlistse_exclude'])) {
 			$option = get_option('emlanlistse_exclude');
 
+			// to avoid php error
 			if (!is_array($option)) $option = [];
 
+			// if not already added
 			if (array_search($post_id, $option) === false) {
 
+				// if to add to collection
 				if (is_array($option)) {
 					array_push($option, intval($post_id));
 
 					update_option('emlanlistse_exclude', $option);
 				}
+				
+				// if to create collection (of one)
 				else update_option('emlanlistse_exclude', [$post_id]);
 			}
 		}
+		// when removing
 		else {
 			$option = get_option('emlanlistse_exclude');
 
@@ -196,7 +236,6 @@ final class Lanlist_edit {
 		// data is sent, then sanitized and saved
 		if (isset($_POST['emlanlistse_data'])) update_post_meta($post_id, 'emlanlistse_data', $this->sanitize($_POST['emlanlistse_data']));
 		if (isset($_POST['emlanlistse_sort'])) update_post_meta($post_id, 'emlanlistse_sort', floatval($_POST['emlanlistse_sort']));
-		// if (isset($_POST['emlanlistse_sort'])) update_post_meta($post_id, 'emlanlistse_sort', $this->sanitize($_POST['emlanlistse_sort']));
 	}
 
 

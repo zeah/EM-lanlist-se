@@ -1,5 +1,8 @@
 <?php 
 
+/**
+ * WP Shortcodes
+ */
 final class Lanlist_shortcode {
 	/* singleton */
 	private static $instance = null;
@@ -14,19 +17,30 @@ final class Lanlist_shortcode {
 		$this->wp_hooks();
 	}
 
+
+	/**
+	 * hooks for wp
+	 */
 	private function wp_hooks() {
+
+		// loan list
 		if (!shortcode_exists('lan')) add_shortcode('lan', array($this, 'add_shortcode'));
 		else add_shortcode('emlanlist', array($this, 'add_shortcode'));
 
+		// loan thumbnail
 		if (!shortcode_exists('lan-bilde')) add_shortcode('lan-bilde', array($this, 'add_shortcode_bilde'));
 		else add_shortcode('emlanlist-bilde', array($this, 'add_shortcode_bilde'));
 
+		// loan button
 		if (!shortcode_exists('lan-bestill')) add_shortcode('lan-bestill', array($this, 'add_shortcode_bestill'));
 		else add_shortcode('emlanlist-bestill', array($this, 'add_shortcode_bestill'));
-	
+
 	}
 
 
+	/**
+	 * returns a list of loans
+	 */
 	public function add_shortcode($atts, $content = null) {
 
 		add_action('wp_enqueue_scripts', array($this, 'add_css'));
@@ -59,14 +73,16 @@ final class Lanlist_shortcode {
 	}
 
 
-
+	/**
+	 * returns only thumbnail from loan
+	 */
 	public function add_shortcode_bilde($atts, $content = null) {
-		if (!isset($atts['name'])) return;
+		if (!isset($atts['name']) || $atts['name'] == '') return;
 
 		$args = [
-			'post_type' => 'emlanlistse',
+			'post_type' 		=> 'emlanlistse',
 			'posts_per_page'	=> 1,
-			'name' => sanitize_text_field($atts['name'])
+			'name' 				=> sanitize_text_field($atts['name'])
 		];
 
 		$post = get_posts($args);
@@ -74,18 +90,22 @@ final class Lanlist_shortcode {
 		if (!is_array($post)) return;
 
 		if (!get_the_post_thumbnail_url($post[0])) return;
-		add_action('wp_enqueue_scripts', array($this, 'add_css'));
 
-		return '<div class="emlanlist-logo-ls"><img style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
+		add_action('wp_enqueue_scripts', array($this, 'add_css'));
+		return '<div class="emlanlist-logo-ls"><img alt="'.esc_attr($post[0]->post_title).'" style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
 	}
 
+
+	/**
+	 * returns bestill button only from loan
+	 */
 	public function add_shortcode_bestill($atts, $content = null) {
-		if (!isset($atts['name'])) return;
+		if (!isset($atts['name']) || $atts['name'] == '') return;
 
 		$args = [
-			'post_type' => 'emlanlistse',
+			'post_type' 		=> 'emlanlistse',
 			'posts_per_page'	=> 1,
-			'name' => sanitize_text_field($atts['name'])
+			'name' 				=> sanitize_text_field($atts['name'])
 		];
 
 		$post = get_posts($args);
@@ -101,34 +121,40 @@ final class Lanlist_shortcode {
 		if (!$meta['bestill']) return;
 
 		add_action('wp_enqueue_scripts', array($this, 'add_css'));
-
-		return '<div class="emlanlist-bestill"><a target="_blank" rel="noopener" class="emlanlist-link" href="'.esc_url($meta['bestill']).'"><svg class="emlanlist-svg" version="1.1" x="0px" y="0px" width="26px" height="20px" viewBox="0 0 26 20" enable-background="new 0 0 24 24" xml:space="preserve"><path fill="none" d="M0,0h24v24H0V0z"/><path class="emlanlist-thumb" d="M1,21h4V9H1V21z M23,10c0-1.1-0.9-2-2-2h-6.31l0.95-4.57l0.03-0.32c0-0.41-0.17-0.79-0.44-1.06L14.17,1L7.59,7.59C7.22,7.95,7,8.45,7,9v10c0,1.1,0.9,2,2,2h9c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,12.5,23,12.26,23,12V10z"/></svg> Ansök här!</a></div>';
+		return '<div class="emlanlist-bestill emlanlist-bestill-mobile"><a target="_blank" rel="noopener" class="emlanlist-link" href="'.esc_url($meta['bestill']).'"><svg class="emlanlist-svg" version="1.1" x="0px" y="0px" width="26px" height="20px" viewBox="0 0 26 20" enable-background="new 0 0 24 24" xml:space="preserve"><path fill="none" d="M0,0h24v24H0V0z"/><path class="emlanlist-thumb" d="M1,21h4V9H1V21z M23,10c0-1.1-0.9-2-2-2h-6.31l0.95-4.57l0.03-0.32c0-0.41-0.17-0.79-0.44-1.06L14.17,1L7.59,7.59C7.22,7.95,7,8.45,7,9v10c0,1.1,0.9,2,2,2h9c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,12.5,23,12.26,23,12V10z"/></svg> Ansök här!</a></div>';
 	}
 
 
-
+	/**
+	 * adding sands to head
+	 */
 	public function add_css() {
         wp_enqueue_style('emlanlistse-style', LANLIST_SE_PLUGIN_URL.'/assets/css/pub/em-lanlist-se.css', array(), '0.0.1', '(min-width: 1280px)');
         wp_enqueue_style('emlanlistse-mobile', LANLIST_SE_PLUGIN_URL.'/assets/css/pub/em-lanlist-se-mobile.css', array(), '0.0.1', '(max-width: 1279px)');
 	}
 
+
+	/**
+	 * returns the html of a list of loans
+	 * @param  WP_Post $posts a wp post object
+	 * @return [html]        html list of loans
+	 */
 	private function get_html($posts) {
 
 		$html = '<ul class="emlanlist-ul">';
 
 		foreach ($posts as $p) {
-			// wp_die('<xmp>'.print_r($p, true).'</xmp>');
 			
 			$meta = get_post_meta($p->ID, 'emlanlistse_data');
 
-			// wp_die('<xmp>'.print_r(get_post_meta($p->ID, 'emlanlistse_sort'), true).'</xmp>');
-			
-
+			// skip if no meta found
 			if (isset($meta[0])) $meta = $meta[0];
 			else continue;
 
+			// sanitize meta
 			$meta = $this->esc_kses($meta);
 
+			// grid container
 			$html .= '<li class="emlanlist-container">';
 
 			// title
@@ -137,6 +163,7 @@ final class Lanlist_shortcode {
 			// thumbnail
 			$html .= '<div class="emlanlist-logo-container"><a target="_blank" rel="noopener" href="'.$meta['bestill'].'"><img class="emlanlist-logo" src="'.wp_kses_post(get_the_post_thumbnail_url($p,'post-thumbnail')).'"></a></div>';
 
+			// info container
 			$html .= '<div class="emlanlist-info-container">';
 
 			// info 1
@@ -153,6 +180,7 @@ final class Lanlist_shortcode {
 
 			$html .= '</div>';
 
+			// info list container 
 			$html .= '<div class="emlanlist-list-container">';
 
 			// info 5
@@ -170,7 +198,6 @@ final class Lanlist_shortcode {
 			$html .= '</div>';
 
 			// terning
-
 			if ($meta['terning'] != 'ingen') {
 				$html .= '<svg class="emlanlist-terning">
 							<defs>
@@ -190,7 +217,6 @@ final class Lanlist_shortcode {
 					case 'fire':
 					$html .= '<circle class="circle-svg" cx="11" cy="10" r="5"/>';
 					$html .= '<circle class="circle-svg" cx="39" cy="40" r="5"/>';
-					// break;
 
 					case 'to':
 					$html .= '<circle class="circle-svg" cx="11" cy="40" r="5"/>';
@@ -232,6 +258,8 @@ final class Lanlist_shortcode {
 
 	/**
 	 * kisses the data
+	 * recursive sanitizer
+	 * 
 	 * @param  Mixed $data Strings or Arrays
 	 * @return Mixed       Kissed data
 	 */

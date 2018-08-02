@@ -19,10 +19,7 @@ final class Lanlist_posttype {
 	private function __construct() {
 		Lanlist_edit::get_instance();
 		// Lanlist_taxonomy::get_instance();
-		/* creates taxonomy */
-		// Emkk_taxonomy::get_instance();
-		/* page edit screen */
-		// Emkk_edit::get_instance();
+
 		/* creates custom post type: emkort */
 		add_action('init', array($this, 'create_cpt'));
 	}
@@ -72,6 +69,7 @@ final class Lanlist_posttype {
 				'thumbnail',
 			),
 		);
+		
 		register_post_type('emlanlistse', $args);
 	}
 }
