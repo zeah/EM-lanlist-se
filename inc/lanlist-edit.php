@@ -55,6 +55,10 @@ final class Lanlist_edit {
 											<br>eks.: [lan name="lendo-privatlan"] will only show the loan with slug-name "lendo-privatlån.
 											<br>[lan name="lendo-privatlan, axo-finans"] will show 2 loans: lendo and axo.</p>
 											</li>
+											<li><b>[lan-bilde name="xx"]</b>
+											<p>Name is required. Will show the loan\'s thumbnail.</p></li>
+											<li><b>[lan-bestill name="xx"]</b>
+											<p>Name is required. Will show the loan\'s button.</p></li>
 										</ul>
 										</li>
 										<li id="emlanlistse-aldri"><h2>Aldri vis</h2>

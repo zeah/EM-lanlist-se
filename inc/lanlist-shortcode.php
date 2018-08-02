@@ -184,37 +184,30 @@ final class Lanlist_shortcode {
 				switch ($meta['terning']) {
 
 					case 'seks':
-					$html .= '<circle class="circle-svg" cx="10" cy="25" r="6"/>';
-					$html .= '<circle class="circle-svg" cx="40" cy="25" r="6"/>';
+					$html .= '<circle class="circle-svg" cx="11" cy="25" r="5"/>';
+					$html .= '<circle class="circle-svg" cx="39" cy="25" r="5"/>';
 
 					case 'fire':
-					$html .= '<circle class="circle-svg" cx="10" cy="10" r="6"/>';
-					// $html .= '<circle class="circle-svg" cx="10" cy="40" r="6"/>';
-					// $html .= '<circle class="circle-svg" cx="40" cy="10" r="6"/>';
-					$html .= '<circle class="circle-svg" cx="40" cy="40" r="6"/>';
+					$html .= '<circle class="circle-svg" cx="11" cy="10" r="5"/>';
+					$html .= '<circle class="circle-svg" cx="39" cy="40" r="5"/>';
 					// break;
 
 					case 'to':
-					$html .= '<circle class="circle-svg" cx="10" cy="40" r="6"/>';
-					$html .= '<circle class="circle-svg" cx="40" cy="10" r="6"/>';
+					$html .= '<circle class="circle-svg" cx="11" cy="40" r="5"/>';
+					$html .= '<circle class="circle-svg" cx="39" cy="10" r="5"/>';
 					break;
 
 					case 'fem':
-					$html .= '<circle class="circle-svg" cx="10" cy="10" r="6"/>';
-					$html .= '<circle class="circle-svg" cx="40" cy="40" r="6"/>';
+					$html .= '<circle class="circle-svg" cx="10" cy="10" r="5"/>';
+					$html .= '<circle class="circle-svg" cx="40" cy="40" r="5"/>';
 
 					case 'tre':
-					$html .= '<circle class="circle-svg" cx="10" cy="40" r="6"/>';
-					$html .= '<circle class="circle-svg" cx="40" cy="10" r="6"/>';
+					$html .= '<circle class="circle-svg" cx="10" cy="40" r="5"/>';
+					$html .= '<circle class="circle-svg" cx="40" cy="10" r="5"/>';
 
 					case 'en':
-					$html .= '<circle class="circle-svg" cx="25" cy="25" r="6"/>';
+					$html .= '<circle class="circle-svg" cx="25" cy="25" r="5"/>';
 					break;
-
-					// case 'to':
-					// $html .= '<circle class="circle-svg" cx="10" cy="40" r="6"/>';
-					// $html .= '<circle class="circle-svg" cx="40" cy="10" r="6"/>';
-					// break;
 
 				}
 
