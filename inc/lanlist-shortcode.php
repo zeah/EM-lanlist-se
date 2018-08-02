@@ -17,6 +17,13 @@ final class Lanlist_shortcode {
 	private function wp_hooks() {
 		if (!shortcode_exists('lan')) add_shortcode('lan', array($this, 'add_shortcode'));
 		else add_shortcode('emlanlist', array($this, 'add_shortcode'));
+
+		if (!shortcode_exists('lan-bilde')) add_shortcode('lan-bilde', array($this, 'add_shortcode_bilde'));
+		else add_shortcode('emlanlist-bilde', array($this, 'add_shortcode_bilde'));
+
+		if (!shortcode_exists('lan-bestill')) add_shortcode('lan-bestill', array($this, 'add_shortcode_bestill'));
+		else add_shortcode('emlanlist-bestill', array($this, 'add_shortcode_bestill'));
+	
 	}
 
 
@@ -50,6 +57,55 @@ final class Lanlist_shortcode {
 
 		return $html;
 	}
+
+
+
+	public function add_shortcode_bilde($atts, $content = null) {
+		if (!isset($atts['name'])) return;
+
+		$args = [
+			'post_type' => 'emlanlistse',
+			'posts_per_page'	=> 1,
+			'name' => sanitize_text_field($atts['name'])
+		];
+
+		$post = get_posts($args);
+
+		if (!is_array($post)) return;
+
+		if (!get_the_post_thumbnail_url($post[0])) return;
+		add_action('wp_enqueue_scripts', array($this, 'add_css'));
+
+		return '<div class="emlanlist-logo-ls"><img style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
+	}
+
+	public function add_shortcode_bestill($atts, $content = null) {
+		if (!isset($atts['name'])) return;
+
+		$args = [
+			'post_type' => 'emlanlistse',
+			'posts_per_page'	=> 1,
+			'name' => sanitize_text_field($atts['name'])
+		];
+
+		$post = get_posts($args);
+
+		if (!is_array($post)) return;
+
+		$meta = get_post_meta($post[0]->ID, 'emlanlistse_data');
+
+		if (!is_array($meta)) return;
+
+		$meta = $meta[0];
+
+		if (!$meta['bestill']) return;
+
+		add_action('wp_enqueue_scripts', array($this, 'add_css'));
+
+		return '<div class="emlanlist-bestill"><a target="_blank" rel="noopener" class="emlanlist-link" href="'.esc_url($meta['bestill']).'"><svg class="emlanlist-svg" version="1.1" x="0px" y="0px" width="26px" height="20px" viewBox="0 0 26 20" enable-background="new 0 0 24 24" xml:space="preserve"><path fill="none" d="M0,0h24v24H0V0z"/><path class="emlanlist-thumb" d="M1,21h4V9H1V21z M23,10c0-1.1-0.9-2-2-2h-6.31l0.95-4.57l0.03-0.32c0-0.41-0.17-0.79-0.44-1.06L14.17,1L7.59,7.59C7.22,7.95,7,8.45,7,9v10c0,1.1,0.9,2,2,2h9c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,12.5,23,12.26,23,12V10z"/></svg> Ansök här!</a></div>';
+	}
+
+
 
 	public function add_css() {
         wp_enqueue_style('emlanlistse-style', LANLIST_SE_PLUGIN_URL.'/assets/css/pub/em-lanlist-se.css', array(), '0.0.1', '(min-width: 1280px)');

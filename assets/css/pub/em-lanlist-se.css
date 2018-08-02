@@ -1,6 +1,7 @@
 .emlanlist-ul {
 	margin: 0;
 	padding: 0;
+	clear: both;
 }
 
 .emlanlist-container {
