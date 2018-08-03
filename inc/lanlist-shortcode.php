@@ -92,6 +92,14 @@ final class Lanlist_shortcode {
 		if (!get_the_post_thumbnail_url($post[0])) return;
 
 		add_action('wp_enqueue_scripts', array($this, 'add_css'));
+
+		$meta = get_post_meta($post[0]->ID, 'emlanlistse_data');
+		if (isset($meta[0])) $meta = $meta[0];
+
+		// returns with anchor
+		if ($meta['bestill']) return '<div class="emlanlist-logo-ls"><a target="_blank" rel=noopener href="'.esc_url($meta['bestill']).'"><img alt="'.esc_attr($post[0]->post_title).'" style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></a></div>';
+
+		// anchor-less image
 		return '<div class="emlanlist-logo-ls"><img alt="'.esc_attr($post[0]->post_title).'" style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
 	}
 
