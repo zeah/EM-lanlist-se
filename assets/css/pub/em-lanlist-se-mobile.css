@@ -14,6 +14,8 @@
 
 	flex-direction: column;
 
+	align-items: center;
+
 	font-size: 1.6rem;
 
 	margin-bottom: 2rem;
@@ -25,7 +27,7 @@
 	background-color: #eee;
 }
 
-@media only screen and (min-width: 710px) {
+@media only screen and (min-width: 600px) {
 
 	.emlanlist-ul {
 		display: flex;
@@ -65,13 +67,26 @@
 .emlanlist-terning,
 .emlanlist-bestill-container,
 .emlanlist-logo-container {
-	align-self: center;
+	/*align-self: center;*/
 }
 
 .emlanlist-title,
 .emlanlist-info-fem,
 .emlanlist-info-en {
 	font-weight: 700;
+}
+
+
+.emlanlist-logo-container {
+	/*display: flex;
+	justify-content: center;*/
+	max-width: 90%;
+}
+
+.emlanlist-logo {
+	width: 25rem;
+	height: auto;
+
 }
 
 .emlanlist-info-fem:before,
@@ -89,8 +104,10 @@
 
 .emlanlist-info-container,
 .emlanlist-list-container {
+	width: 25rem;
+	max-width: 90%;
 	/*margin: 1.5rem 0;*/
-	margin: 0 6rem;
+	/*margin: 0 6rem;*/
 }
 
 .emlanlist-info-container {
@@ -109,9 +126,17 @@
 	margin-bottom: 1rem;
 }
 
+.emlanlist-end-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 .emlanlist-terning {
 	width: 50px;
 	height: 50px;
+
+	background-color: #e22;
 }
 
 /* dice dimensions */
@@ -130,13 +155,15 @@
 }
 
 .emlanlist-bestill {
-	display: flex;
-	justify-content: center;
+	text-align: center;
+	/*display: flex;
+	justify-content: center;*/
+	margin-bottom: 1rem;
 }
 
 .emlanlist-bestilltext {
-	margin-top: 1rem;
-	text-align: center;
+	/*margin-top: 1rem;
+	text-align: center;*/
 }
 
 .emlanlist-link {
@@ -169,4 +196,10 @@
 
 .emlanlist-thumb {
 	fill: #fff;
+}
+
+.emlanlist-logo-ls {
+	width: 50%;
+	height: auto;
+	float: right;
 }

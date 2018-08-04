@@ -41,12 +41,14 @@
 .emlanlist-container {
 	display: grid;
 
-	grid-template-columns: 20rem 1fr 1fr 15rem 20rem;
-	grid-template-rows: 2.5rem auto;
+	grid-template-columns: minmax(10rem, 20rem) minmax(20rem, 1fr) minmax(20rem, 1fr) minmax(auto, 20rem);
+	grid-template-rows: minmax(2.5rem, auto) auto;
 
 	grid-template-areas: 
-	"title infoC infoL terning bestillc"
-	"logo infoC infoL terning bestillc";
+	"title infoC infoL endc endc"
+	"logo infoC infoL endc endc";
+	/*"title infoC infoL terning bestillc"*/
+	/*"logo infoC infoL terning bestillc";*/
 	
 	padding: 2rem 1rem 1rem 1rem;
 
@@ -66,7 +68,6 @@
 	border-bottom: none;
 }
 
-
 /* 2.0 elements in container */
 
 /* 2.1 bold elements */
@@ -79,10 +80,14 @@
 /* 2.2 title */
 .emlanlist-title-container {
 	grid-area: title;
+	/*white-space: nowrap;*/
+	z-index: 10;
+	/*background-color: inherit;*/
 }
 .emlanlist-title {
 	font-size: 1.6rem;
 	color: #000;
+	/*background-color: inherit;*/
 }
 
 
@@ -104,7 +109,8 @@
 
 /* 2.4.1 info element (and list info elements) */
 .emlanlist-info {
-	margin: 0 0 1rem 6rem;
+	margin: 0 0 1rem 2rem;
+	/*margin: 0 0 1rem 6rem;*/
 }
 
 
@@ -124,20 +130,31 @@
 	list-style: disc;
 } 
 
+/* dice and bestill */
+.emlanlist-end-container {
+	grid-area: endc;
 
+	margin-top: 2.5rem;
+
+	display: flex;
+	justify-content: space-around;
+	align-items: flex-end;
+	flex-wrap: wrap-reverse;
+}
 
 /* 2.6 dice */
 .emlanlist-terning {
-	grid-area: terning;
+	/*grid-area: terning;*/
 
-	justify-self: center;
-	align-self: center;
-	margin-bottom: 0.5rem;
+	/*justify-self: center;*/
+	/*align-self: center;*/
+	/*margin-bottom: 0.5rem;*/
 
 	width: 50px;
 	height: 50px;
 	background-color: #e22;
 	border-radius: 3px;
+	margin: 0 1rem;
 }
 
 
@@ -157,9 +174,9 @@
 
 /* 2.7 bestill button */
 .emlanlist-bestill-container {
-	grid-area: bestillc;
-	align-self: center;
-	margin-top: 1.6rem;
+	/*grid-area: bestillc;*/
+	/*align-self: center;*/
+	/*margin-top: 1.6rem;*/
 }
 .emlanlist-bestill {
 	display: flex;
@@ -182,6 +199,8 @@
 	text-shadow: 0 0 2px #000;
 	font-family: arial;
 	text-decoration: none;
+
+	white-space: nowrap;
 }
 
 
@@ -198,6 +217,7 @@
 .emlanlist-bestilltext {
 	margin-top: 0.5rem;
 	text-align: center;
+	padding-bottom: 1rem;
 }
 
 /* 3.0 other browsers */
@@ -230,7 +250,7 @@
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
 	.emlanlist-container {
 		display: -ms-grid;
-		-ms-grid-columns: 20rem 1fr 1fr 15rem 20rem;
+		-ms-grid-columns: 20rem 1fr 1fr auto;
 		-ms-grid-rows: 2.5rem auto;
 	}
 
@@ -240,8 +260,8 @@
 	}
 
 	.emlanlist-logo-container {
-		-ms-grid-column: 1;
 		-ms-grid-row: 2;
+		-ms-grid-column: 1;
 	}
 
 	.emlanlist-info-container {
@@ -256,17 +276,15 @@
 		-ms-grid-row-span: 2;
 	}
 
-	.emlanlist-terning {
+	.emlanlist-end-container {
+		display: -ms-flexbox;
+
+		align-items: flex-start;
+
 		-ms-grid-row: 1;
 		-ms-grid-column: 4;
 		-ms-grid-row-span: 2;
-		background-color: red;
-		margin-top: 1.8rem;
+
 	}
 
-	.emlanlist-bestill-container {
-		-ms-grid-row: 1;
-		-ms-grid-column: 5;
-		-ms-grid-row-span: 2;
-	}
 }
