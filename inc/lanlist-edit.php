@@ -56,8 +56,15 @@ final class Lanlist_edit {
 											<li><b>[lan name="xx, yy"]</b>
 											<p>Shows only the loans that is mentioned in the shortcode.
 											<br>The name needs to be the slug-name of the loan.
+											<br>Loans are sorted by the position they have in name=""
 											<br>eks.: [lan name="lendo-privatlan"] will only show the loan with slug-name "lendo-privatlån.
 											<br>[lan name="lendo-privatlan, axo-finans"] will show 2 loans: lendo and axo.</p>
+											<li><b>[lan lan="xx"]</b>
+											<p>lan must match the slug-name of the lan type.
+											<br>The loans are sorted by the sort order given in load edit page for that type.
+											<br>Eks: [lan lan="frontpage"] shows all loans with the category "frontpage" in the order of lowest number
+											<br>of field "Sort frontpage" has in the load editor page.</p>
+											</li>
 											</li>
 											<li><b>[lan-bilde name="xx"]</b>
 											<p>Name is required. Will show the loan\'s thumbnail.</p></li>
@@ -155,11 +162,24 @@ final class Lanlist_edit {
 
 		$meta = get_post_meta($post->ID, 'emlanlistse_data');
 		$sort = get_post_meta($post->ID, 'emlanlistse_sort');
-		
+
+		$tax = wp_get_post_terms($post->ID, 'emlanlistsetype');
+
+		$taxes = [];
+		if (is_array($tax))
+			foreach($tax as $t)
+				array_push($taxes, $t->slug);
+
 		$json = [
 			'meta' => isset($meta[0]) ? $this->sanitize($meta[0]) : '',
-			'sort' => isset($sort[0]) ? floatval($sort[0]) : ''
+			'emlanlistse_sort' => isset($sort[0]) ? floatval($sort[0]) : '',
+			'tax'  => $taxes
 		];
+
+		$ameta = get_post_meta($post->ID);
+		foreach($ameta as $key => $value)
+			if (strpos($key, 'emlanlistse_sort_') !== false && isset($value[0])) $json[$key] = esc_html($value[0]);
+
 
 		wp_localize_script('em-lanlist-se-admin', 'emlanlistse_meta', json_decode(json_encode($json), true));
 		echo '<div class="emlanlistse-meta-container"></div>';
@@ -236,6 +256,12 @@ final class Lanlist_edit {
 		// data is sent, then sanitized and saved
 		if (isset($_POST['emlanlistse_data'])) update_post_meta($post_id, 'emlanlistse_data', $this->sanitize($_POST['emlanlistse_data']));
 		if (isset($_POST['emlanlistse_sort'])) update_post_meta($post_id, 'emlanlistse_sort', floatval($_POST['emlanlistse_sort']));
+
+		foreach($_POST as $key => $po) {
+			if (strpos($key, 'emlanlistse_sort_') !== false)
+				update_post_meta($post_id, sanitize_text_field(str_replace(' ', '', $key)), floatval($po));
+		}
+
 	}
 
 

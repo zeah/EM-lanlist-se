@@ -51,11 +51,24 @@ final class Lanlist_shortcode {
 			'post_type' 		=> 'emlanlistse',
 			'posts_per_page' 	=> -1,
 			'orderby'			=> [
-										'meta_value_num' => 'DESC',
+										'meta_value_num' => 'ASC',
 										'title' => 'ASC'
 								   ],
-			'meta_key'			=> 'emlanlistse_sort'
+			'meta_key'			=> 'emlanlistse_sort'.($atts['lan'] ? '_'.sanitize_text_field($atts['lan']) : '')
 		];
+
+
+		$type = false;
+		if (isset($atts['lan'])) $type = $atts['lan'];
+		if ($type)
+			$args['tax_query'] = array(
+					array(
+						'taxonomy' => 'emlanlistsetype',
+						'field' => 'slug',
+						'terms' => sanitize_text_field($type)
+					)
+				);
+
 
 		$names = false;
 		if (isset($atts['name'])) $names = explode(',', preg_replace('/ /', '', $atts['name']));
@@ -65,7 +78,17 @@ final class Lanlist_shortcode {
 
 		if (is_array($exclude) && !empty($exclude)) $args['post__not_in'] = $exclude;
 
-		$posts = get_posts($args);
+		$posts = get_posts($args);	
+
+		$sorted_posts = [];
+		if ($names) {
+			foreach(explode(',', preg_replace('/ /', '', $atts['name'])) as $n)
+				foreach($posts as $p) 
+					if ($n === $p->post_name) array_push($sorted_posts, $p);
+		
+			$posts = $sorted_posts;
+		}
+				
 
 		$html = $this->get_html($posts);
 

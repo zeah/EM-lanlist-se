@@ -1,6 +1,8 @@
 (() => {
 
-	console.log(emlanlistse_meta);
+	// console.log(emlanlistse_meta);
+
+	let newtype = '';
 
 	let container = document.querySelector('.emlanlistse-meta-container');
 
@@ -34,7 +36,16 @@
 		else input.setAttribute('type', o.type);
 
 		if (!o.sort) input.setAttribute('value', (emlanlistse_meta.meta[o.name] == undefined) ? '' : emlanlistse_meta.meta[o.name]);
-		else input.setAttribute('value', emlanlistse_meta.sort);
+		else {
+			let sort = emlanlistse_meta.emlanlistse_sort;
+
+			if (o.sort != 'default') sort = emlanlistse_meta['emlanlistse_sort_'+o.sort];
+
+			if (sort == undefined) sort = 100;
+
+			input.setAttribute('value', sort);
+		}
+
 
 		if (!o.notData) input.setAttribute('name', 'emlanlistse_data['+o.name+']');
 		else input.setAttribute('name', o.name);
@@ -74,7 +85,11 @@
 		return container; 
 	}
 
-	container.appendChild(newinput({name: 'emlanlistse_sort', title: 'Sortering', notData: true, sort: true}));
+	container.appendChild(newinput({name: 'emlanlistse_sort', title: 'Sortering', notData: true, sort: 'default'}));
+
+
+	for (let sort of emlanlistse_meta['tax'])
+		container.appendChild(newinput({name: 'emlanlistse_sort_'+sort, title: 'Sortering '+sort, notData: true, sort: sort}));
 
 	container.appendChild(newinput({name: 'readmore', title: 'Read More Link'}));
 
@@ -95,5 +110,30 @@
 	container.appendChild(info_container);
 
 	container.appendChild(dicedropdown());
+
+
+	jQuery('#emlanlistsetypechecklist').on('change', function(e) {
+
+		let text = $(e.target).parent().text().trim().replace(/ /g, '-');
+
+		if (!e.target.checked) $("input[name='emlanlistse_sort_"+text+"']").parent().remove();
+		else {
+			let input = newinput({name: 'emlanlistse_sort_'+text, title: 'Sortering '+text.replace(/-/g, ' '), notData: true, sort: text});
+
+			$(input).insertAfter($("input[name='emlanlistse_sort']"));
+
+		}
+	});
+
+	jQuery('#newemlanlistsetype').on('input', function(e) {
+		newtype = e.target.value;
+	});
+
+	jQuery('#emlanlistsetype-add-submit').click(function(e) {
+		let text = newtype.trim().replace(/ /g, '-');
+		let input = newinput({name: 'emlanlistse_sort_'+text, title: 'Sortering '+text.replace(/-/g, ' '), notData: true, sort: text});
+
+		$(input).insertAfter($("input[name='emlanlistse_sort']"));
+	});
 
 })();
