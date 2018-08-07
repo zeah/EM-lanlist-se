@@ -20,3 +20,28 @@
 .emlanlistse-input-title {
 	font-size: 16px;
 }
+
+/* overview window */
+
+#myTable2 {
+	border-collapse:separate; 
+  	border-spacing: 0 3px;
+}
+
+#myTable2 tr:nth-child(even) {
+	background-color: #fff;
+}
+
+#myTable2 tr:hover {
+	background-color: #aae;
+	/*border: solid 1px black;*/
+	/*margin-bottom: 30px;*/
+}
+
+#myTable2 th {
+	cursor: pointer;
+}
+
+#myTable2 td {
+	padding: 3px 10px;
+}

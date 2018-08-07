@@ -46,6 +46,7 @@ final class Lanlist_edit {
 												<li><a href="#emlanlistse-shortcode">Shortcode</a></li>
 												<li><a href="#emlanlistse-aldri">Aldri vis</a></li>
 												<li><a href="#emlanlistse-sort">Sorting order</a></li>
+												<li><a href="#emlanlistse-overview">Overview</a></li>
 											</ul>
 										</li>';
 		$data['emlanlistse']['info'] = '<li id="emlanlistse-shortcode"><h2>Shortcodes</h2>
@@ -77,8 +78,16 @@ final class Lanlist_edit {
 										</li>
 										</li>
 										<li id="emlanlistse-sort"><h2>Sorting order</h2>
-										<p>The loans will be shown with the highest "Sort"-value first.</p>
-										</li>';
+										<p>The loans will be shown with the lowest "Sort"-value first.
+										<br>When only showing a specific category on loan page, then the sort order column will reflect 
+										<br>that category\'s sort order.</p>
+										</li>
+										<li id="emlanlistse-overview"><h2>Overview</h2>
+										<p> The <a target="_blank" href="'.get_site_url().'/wp-admin/edit.php?post_type=emlanlistse&page=emlanlistse-overview">overview page</a> will show every post and page and whether or not there are
+										<br>any lan shortcodes in them.
+										<br>You can sort the columns alphabetically</p>
+										</li>
+										';
 
 		return $data;
 	}
