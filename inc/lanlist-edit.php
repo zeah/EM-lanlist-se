@@ -103,9 +103,20 @@ final class Lanlist_edit {
 	 */
 	public function custom_column($column_name) {
 		global $post;
+		// echo $_SERVER['QUERY_STRING'];
+
+		// echo parse_url()
+		
+		// echo print_r($q_out, true);
 
 		if ($column_name == 'emlanlistse_sort') {
-			$meta = get_post_meta($post->ID, 'emlanlistse_sort');
+			$q_out = null;
+			parse_str($_SERVER['QUERY_STRING'], $q_out);
+
+			$meta = 'emlanlistse_sort';
+			if (isset($q_out['emlanlistsetype'])) $meta = $meta.'_'.$q_out['emlanlistsetype'];
+
+			$meta = get_post_meta($post->ID, $meta);
 			
 			if (isset($meta[0])) echo $meta[0];
 		}
