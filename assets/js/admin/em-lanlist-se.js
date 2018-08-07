@@ -4,8 +4,10 @@
 
 	let newtype = '';
 
+	// meta box
 	let container = document.querySelector('.emlanlistse-meta-container');
 
+	// new div helper function
 	let newdiv = (o = {}) => {
 		let div = document.createElement('div');
 
@@ -22,6 +24,7 @@
 		return div;
 	}
 
+	// new input helper function
 	let newinput = (o = {}) => {
 		if (!o.name) return document.createElement('div');
 
@@ -41,10 +44,15 @@
 
 			if (o.sort != 'default') sort = emlanlistse_meta['emlanlistse_sort_'+o.sort];
 
-			if (sort == undefined) sort = 100;
+			if (sort == undefined) sort = emlanlistse_meta.emlanlistse_sort;
 
 			input.setAttribute('value', sort);
 		}
+
+		if (o.step) input.setAttribute('step', parseFloat(o.step));
+		if (o.max) input.setAttribute('max', parseFloat(o.step));
+		if (o.min) input.setAttribute('min', parseFloat(o.step));
+
 
 
 		if (!o.notData) input.setAttribute('name', 'emlanlistse_data['+o.name+']');
@@ -56,6 +64,7 @@
 		return container;
 	}
 
+	// creating the drop down for dice selection
 	let dicedropdown = (o = {}) => {
 		let container = document.createElement('div');
 
@@ -64,6 +73,7 @@
 
 		container.appendChild(newdiv({class: 'emlanlistse-input-title', text: 'Terningkast'}));
 
+		// helper function for creating option tag
 		let addOption = (o = {}) => {
 			let option = document.createElement('option');
 			option.setAttribute('value', o.value);
@@ -72,24 +82,45 @@
 			return option;
 		}
 
-		input.appendChild(addOption({value: 'ingen'}));
-		input.appendChild(addOption({value: 'en'}));
-		input.appendChild(addOption({value: 'to'}));
-		input.appendChild(addOption({value: 'tre'}));
-		input.appendChild(addOption({value: 'fire'}));
-		input.appendChild(addOption({value: 'fem'}));
-		input.appendChild(addOption({value: 'seks'}));
+		// adding option tags
+		let v = ['ingen', 'en', 'to', 'tre', 'fire', 'fem', 'seks'];
+		for (let i of v)
+			input.appendChild(addOption({value: i}));
+
+		// input.appendChild(addOption({value: 'ingen'}));
+		// input.appendChild(addOption({value: 'en'}));
+		// input.appendChild(addOption({value: 'to'}));
+		// input.appendChild(addOption({value: 'tre'}));
+		// input.appendChild(addOption({value: 'fire'}));
+		// input.appendChild(addOption({value: 'fem'}));
+		// input.appendChild(addOption({value: 'seks'}));
 
 		container.appendChild(input);
 
 		return container; 
 	}
 
-	container.appendChild(newinput({name: 'emlanlistse_sort', title: 'Sortering', notData: true, sort: 'default'}));
+	let container_sort = newdiv({class: 'emlanlistse-sort-container'});
+	container_sort.appendChild(newinput({
+		name: 'emlanlistse_sort', 
+		title: 'Sortering', 
+		notData: true, 
+		sort: 'default', 
+		type: 'number',
+		step: 0.01
+	}));
 
+	container.appendChild(container_sort);
 
 	for (let sort of emlanlistse_meta['tax'])
-		container.appendChild(newinput({name: 'emlanlistse_sort_'+sort, title: 'Sortering '+sort, notData: true, sort: sort}));
+		container_sort.appendChild(newinput({
+			name: 'emlanlistse_sort_'+sort, 
+			title: 'Sortering '+sort.replace(/-/g, ' '), 
+			notData: true, 
+			sort: sort, 
+			type: 'number',
+			step: 0.01
+		}));
 
 	container.appendChild(newinput({name: 'readmore', title: 'Read More Link'}));
 
@@ -112,28 +143,36 @@
 	container.appendChild(dicedropdown());
 
 
+	// adding existing category
 	jQuery('#emlanlistsetypechecklist').on('change', function(e) {
 
 		let text = $(e.target).parent().text().trim().replace(/ /g, '-');
 
 		if (!e.target.checked) $("input[name='emlanlistse_sort_"+text+"']").parent().remove();
 		else {
-			let input = newinput({name: 'emlanlistse_sort_'+text, title: 'Sortering '+text.replace(/-/g, ' '), notData: true, sort: text});
+			let input = newinput({
+				name: 'emlanlistse_sort_'+text, 
+				title: 'Sortering '+text.replace(/-/g, ' '), 
+				notData: true, 
+				sort: text, 
+				type: 'number',
+				step: 0.01
+			});
 
-			$(input).insertAfter($("input[name='emlanlistse_sort']"));
-
+			// $("input[name='emlanlistse_sort']").parent().parent().append(input);
+			$('.emlanlistse-sort-container').append(input);
 		}
 	});
 
-	jQuery('#newemlanlistsetype').on('input', function(e) {
-		newtype = e.target.value;
-	});
+	// reading name of new category for creating
+	jQuery('#newemlanlistsetype').on('input', function(e) { newtype = e.target.value; });
 
+	// creating category
 	jQuery('#emlanlistsetype-add-submit').click(function(e) {
 		let text = newtype.trim().replace(/ /g, '-');
-		let input = newinput({name: 'emlanlistse_sort_'+text, title: 'Sortering '+text.replace(/-/g, ' '), notData: true, sort: text});
-
-		$(input).insertAfter($("input[name='emlanlistse_sort']"));
+		let input = newinput({name: 'emlanlistse_sort_'+text, title: 'Sortering '+text.replace(/-/g, ' '), notData: true, sort: text, type: 'number'});
+		$('.emlanlistse-sort-container').append(input);
+		// $("input[name='emlanlistse_sort']").parent().parent().append(input);
 	});
 
 })();

@@ -35,6 +35,8 @@ final class Lanlist_shortcode {
 		if (!shortcode_exists('lan-bestill')) add_shortcode('lan-bestill', array($this, 'add_shortcode_bestill'));
 		else add_shortcode('emlanlist-bestill', array($this, 'add_shortcode_bestill'));
 
+
+		add_filter('search_first', array($this, 'add_serp'));
 	}
 
 
@@ -160,8 +162,8 @@ final class Lanlist_shortcode {
 	 * adding sands to head
 	 */
 	public function add_css() {
-        wp_enqueue_style('emlanlistse-style', LANLIST_SE_PLUGIN_URL.'assets/css/pub/em-lanlist-se.css', array(), '1.0.0', '(min-width: 801px)');
-        wp_enqueue_style('emlanlistse-mobile', LANLIST_SE_PLUGIN_URL.'assets/css/pub/em-lanlist-se-mobile.css', array(), '1.0.0', '(max-width: 800px)');
+        wp_enqueue_style('emlanlistse-style', LANLIST_SE_PLUGIN_URL.'assets/css/pub/em-lanlist-se.css', array(), '1.0.1', '(min-width: 801px)');
+        wp_enqueue_style('emlanlistse-mobile', LANLIST_SE_PLUGIN_URL.'assets/css/pub/em-lanlist-se-mobile.css', array(), '1.0.1', '(max-width: 800px)');
 	}
 
 
@@ -171,7 +173,6 @@ final class Lanlist_shortcode {
 	 * @return [html]        html list of loans
 	 */
 	private function get_html($posts) {
-
 		$html = '<ul class="emlanlist-ul">';
 
 		foreach ($posts as $p) {
@@ -229,7 +230,6 @@ final class Lanlist_shortcode {
 			$html .= '</div>';
 
 			$html .= '<div class="emlanlist-end-container">';
-
 			// terning
 			if ($meta['terning'] != 'ingen') {
 				$html .= '<svg class="emlanlist-terning">
@@ -288,6 +288,17 @@ final class Lanlist_shortcode {
 		$html .= '</ul>';
 
 		return $html;
+	}
+
+	public function add_serp($data) {
+		global $post;
+
+		$html['html'] = $this->get_html([$post]);
+
+		array_push($data, $html);
+		add_action('wp_enqueue_scripts', array($this, 'add_css'));
+
+		return $data;
 	}
 
 
