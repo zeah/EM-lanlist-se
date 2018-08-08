@@ -290,8 +290,25 @@ final class Lanlist_shortcode {
 		return $html;
 	}
 
+
+
+	/**
+	 * wp filter for adding to internal serp
+	 * array_push to $data
+	 * $data['html'] to be printed
+	 * 
+	 * @param [Array] $data [filter]
+	 */
 	public function add_serp($data) {
 		global $post;
+
+		if ($post->post_type != 'emlanlistse') return $data;
+
+		$exclude = get_option('emlanlistse_exclude');
+
+		if (!is_array($exclude)) $exclude = [];
+
+		if (in_array($post->ID, $exclude)) return $data;
 
 		$html['html'] = $this->get_html([$post]);
 
@@ -300,6 +317,7 @@ final class Lanlist_shortcode {
 
 		return $data;
 	}
+
 
 
 	/**
