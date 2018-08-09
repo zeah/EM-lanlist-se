@@ -199,7 +199,5 @@
 }
 
 .emlanlist-logo-ls {
-	width: 50%;
-	height: auto;
-	float: right;
+	text-align: center;
 }

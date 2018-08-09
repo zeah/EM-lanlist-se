@@ -122,10 +122,10 @@ final class Lanlist_shortcode {
 		if (isset($meta[0])) $meta = $meta[0];
 
 		// returns with anchor
-		if ($meta['bestill']) return '<div class="emlanlist-logo-ls"><a target="_blank" rel=noopener href="'.esc_url($meta['bestill']).'"><img alt="'.esc_attr($post[0]->post_title).'" style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></a></div>';
+		if ($meta['bestill']) return '<div class="emlanlist-logo-ls"><a target="_blank" rel=noopener href="'.esc_url($meta['bestill']).'"><img alt="'.esc_attr($post[0]->post_title).'" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></a></div>';
 
 		// anchor-less image
-		return '<div class="emlanlist-logo-ls"><img alt="'.esc_attr($post[0]->post_title).'" style="width: 100%; height: auto;" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
+		return '<div class="emlanlist-logo-ls"><img alt="'.esc_attr($post[0]->post_title).'" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
 	}
 
 
@@ -142,7 +142,6 @@ final class Lanlist_shortcode {
 		];
 
 		$post = get_posts($args);
-
 		if (!is_array($post)) return;
 
 		$meta = get_post_meta($post[0]->ID, 'emlanlistse_data');
