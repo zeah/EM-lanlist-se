@@ -24,7 +24,7 @@ final class Lanlist_overview {
 		wp_enqueue_style('em-lanlist-se-admin-style', LANLIST_SE_PLUGIN_URL . 'assets/css/admin/em-lanlist-se.css', array(), '1.0.1');
 
 		$args = [
-			'post_type' 		=> array('page', 'post'),
+			'post_type' 		=> get_post_types(['public' => true]),
 			'posts_per_page'	=> -1
 		];
 
@@ -35,6 +35,8 @@ final class Lanlist_overview {
 		$html = '<table id="myTable2" style="font-size: 16px;"><tr><th width="400px" onclick="sortTable(0)">Url</th><th onclick="sortTable(1)">Name</th><th onclick="sortTable(2)">Shortcode</th></tr>';
 
 		foreach ($posts as $post) {
+
+			if ($post->post_type == 'attachment') continue;
 
 			if (strpos($post->post_content, '[lan') !== false) {
 				preg_match_all('/\[lan.*?\]/', $post->post_content, $matches);

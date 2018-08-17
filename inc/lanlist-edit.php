@@ -161,7 +161,7 @@ final class Lanlist_edit {
 
 		/* to show or not on front-end */
 		add_meta_box(
-			'emalanlistse_exclude',
+			'emlanlistse_exclude',
 			'Aldri vis',
 			array($this, 'exclude_meta_box'),
 			'emlanlistse',
