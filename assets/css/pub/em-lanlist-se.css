@@ -163,7 +163,7 @@
 
 
 /* 2.6.1 dice svg */
-.rect-svg {
+.emlanlist-rect-svg {
 	height: 50px;
 	width: 50px;
 	/*fill: #0f0;*/
@@ -171,7 +171,7 @@
 
 
 /* 2.6.2 dice eye svg */
-.circle-svg {
+.emlanlist-circle-svg {
 	fill: #ffffff;
 }
 

@@ -2,7 +2,7 @@
 /*
 Plugin Name: EM Lånlist Sverige
 Description: Liste for privatlånlistan
-Version: 1.1.6
+Version: 1.1.7
 GitHub Plugin URI: zeah/EM-lanlist-se
 */
 

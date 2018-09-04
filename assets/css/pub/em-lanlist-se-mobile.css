@@ -140,13 +140,13 @@
 }
 
 /* dice dimensions */
-.rect-svg {
+.emlanlist-rect-svg {
 	height: 50px;
 	width: 50px;
 }
 
 /* dice eye color */
-.circle-svg {
+.emlanlist-circle-svg {
 	fill: #ffffff;
 }
 
