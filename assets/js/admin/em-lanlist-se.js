@@ -170,6 +170,9 @@
 	// creating category
 	jQuery('#emlanlistsetype-add-submit').click(function(e) {
 		let text = newtype.trim().replace(/ /g, '-');
+		text = text.replace('ö', 'o');
+		text = text.replace('ä', 'ae');
+		text = text.replace('å', 'a');
 		let input = newinput({name: 'emlanlistse_sort_'+text, title: 'Sortering '+text.replace(/-/g, ' '), notData: true, sort: text, type: 'number'});
 		$('.emlanlistse-sort-container').append(input);
 		// $("input[name='emlanlistse_sort']").parent().parent().append(input);
