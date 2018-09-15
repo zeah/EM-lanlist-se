@@ -68,9 +68,10 @@ final class Lanlist_edit {
 											</li>
 											</li>
 											<li><b>[lan-bilde name="xx"]</b>
-											<p>Name is required. Will show the loan\'s thumbnail.</p></li>
+											<p>Name is required. Will show the loan\'s thumbnail with a link.
+											<br>[kredittkort-bestlil name="xx" source="test"] will append &source=test at the link.</p></li>
 											<li><b>[lan-bestill name="xx"]</b>
-											<p>Name is required. Will show the loan\'s button.</p>
+											<p>Name is required. Will show the loan\'s button.
 											<br>[kredittkort-bestlil name="xx" source="test"] will append &source=test at the link.</p></li>
 											
 										</ul>
