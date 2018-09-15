@@ -337,8 +337,13 @@ final class Lanlist_edit {
 		if (!is_array($data)) return wp_kses_post($data);
 
 		$d = [];
-		foreach($data as $key => $value)
-			$d[$key] = $this->sanitize($value);
+		foreach($data as $key => $value) {
+			switch ($key) {
+				case 'bestill':
+				case 'redmore': $d[$key] = sanitize_text_field($value); break;
+				default: $this->sanitize($value); break;
+			}
+		}
 
 		return $d;
 	}
