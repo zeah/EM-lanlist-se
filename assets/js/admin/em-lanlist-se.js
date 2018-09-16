@@ -126,6 +126,7 @@
 
 	container.appendChild(newinput({name: 'bestill', title: 'Bestill Link'}));
 	container.appendChild(newinput({name: 'bestill_text', title: 'Bestill Text (under bestillknapp)'}));
+	container.appendChild(newinput({name: 'pixel', title: 'Tracking Pixel URL'}));
 
 	let info_container = newdiv({class: 'emlanlistse-info-container'});
 
