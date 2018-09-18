@@ -343,7 +343,7 @@ final class Lanlist_edit {
 				case 'bestill':
 				case 'pixel':
 				case 'redamore': $d[$key] = sanitize_text_field($value); break;
-				default: $this->sanitize($value); break;
+				default: $d[$key] = $this->sanitize($value); break;
 			}
 		}
 
