@@ -94,7 +94,7 @@ final class Lanlist_shortcode {
 		}
 				
 
-		$html = $this->get_html($posts, $atts['source']);
+		$html = $this->get_html($posts, $atts);
 
 		return $html;
 	}
@@ -132,11 +132,11 @@ final class Lanlist_shortcode {
 
 		$html = '';
 
-		if ($meta['pixel']) {
-			if ($atts['source']) $meta['pixel'] = $this->add_source($meta['pixel'], $atts['source']); 
-			$html .= $this->add_pixel($meta['pixel']);
-		}
-		if ($atts['source']) $meta['bestill'] = $this->add_source($meta['bestill'], $atts['source']);
+		// if ($meta['pixel']) {
+		// 	if ($atts['source']) $meta['pixel'] = $this->add_source($meta['pixel'], $atts['source']); 
+		// 	$html .= $this->add_pixel($meta['pixel']);
+		// }
+		// if ($atts['source']) $meta['bestill'] = $this->add_source($meta['bestill'], $atts['source']);
 		// if  ($atts['source']) {
 		// 	if (preg_match('/(?:(?!\?|&))(?:source=.*?)(?:(&|$))/', $meta['bestill'], $matches))
 		// 		$meta['bestill'] = str_replace($matches[0], '', $meta['bestill']); 
@@ -148,12 +148,26 @@ final class Lanlist_shortcode {
 		// }
 
 		// returns with anchor
-		if ($meta['bestill']) $html .= '<div class="emlanlist-logo-ls"'.($float ? $float : '').'><a target="_blank" rel=noopener href="'.esc_url($meta['bestill']).'"><img alt="'.esc_attr($post[0]->post_title).'" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></a></div>';
+		if ($meta['bestill']) {
+			// adding tracking pixel
+			if ($meta['pixel']) {
+				if ($meta['qstring']) $html .= $this->add_pixel($this->add_query_string($meta['pixel'], $atts['source'], $atts['page']));
+				else $html .= $this->add_pixel($meta['pixel']);
+			}
 
+			// fixing query string
+			if ($meta['qstring']) $meta['bestill'] = $this->add_query_string($meta['bestill'], $atts['source'], $atts['page']);
+
+			// image with anchor
+			// $meta['bestill'] = $this->add_query_string($meta['bestill'], $atts['source'], $atts['page']);
+			// if ($meta['pixel']) $html .= $this->add_pixel($this->add_query_string($meta['pixel'], $atts['source'], $atts['page']));
+
+
+			$html .= '<div class="emlanlist-logo-ls"'.($float ? $float : '').'><a target="_blank" rel=noopener href="'.esc_url($meta['bestill']).'"><img alt="'.esc_attr($post[0]->post_title).'" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></a></div>';
+			return $html;
+		}
 		// anchor-less image
-		else $html .= '<div class="emlanlist-logo-ls"'.($float ? $float : '').'><img alt="'.esc_attr($post[0]->post_title).'" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
-	
-		return $html;
+		return'<div class="emlanlist-logo-ls"'.($float ? $float : '').'><img alt="'.esc_attr($post[0]->post_title).'" src="'.esc_url(get_the_post_thumbnail_url($post[0], 'full')).'"></div>';
 	}
 
 
@@ -180,6 +194,8 @@ final class Lanlist_shortcode {
 
 		if (!$meta['bestill']) return;
 
+		add_action('wp_enqueue_scripts', array($this, 'add_css'));
+
 		$float = false;
 		if ($atts['float']) 
 			switch ($atts['float']) {
@@ -189,23 +205,15 @@ final class Lanlist_shortcode {
 
 		$html = '';
 
-		// adding/overwriting source to query string in url
+		// fixing query string
+		if ($meta['qstring']) $meta['bestill'] = $this->add_query_string($meta['bestill'], $atts['source'], $atts['page']);
+
+		// adding tracking pixel
 		if ($meta['pixel']) {
-			if ($atts['source']) $meta['pixel'] = $this->add_source($meta['pixel'], $atts['source']); 
-			$html .= $this->add_pixel($meta['pixel']);
+			if ($meta['qstring']) $html .= $this->add_pixel($this->add_query_string($meta['pixel'], $atts['source'], $atts['page']));
+			else $html .= $this->add_pixel($meta['pixel']);
 		}
-		if ($atts['source']) $meta['bestill'] = $this->add_source($meta['bestill'], $atts['source']);
-		// if  ($atts['source']) {
-		// 	if (preg_match('/(?:(?!\?|&))(?:source=.*?)(?:(&|$))/', $meta['bestill'], $matches))
-		// 		$meta['bestill'] = str_replace($matches[0], '', $meta['bestill']); 
 
-		// 	$meta['bestill'] = preg_replace('/\?$/', '', $meta['bestill']);
- 
-		// 	if (strpos($meta['bestill'], '?') !== false) $meta['bestill'] .= '&source=' . $atts['source'];
-		// 	else $meta['bestill'] .= '?source=' . $atts['source'];
-		// }
-
-		add_action('wp_enqueue_scripts', array($this, 'add_css'));
 		$html .= '<div class="emlanlist-bestill emlanlist-bestill-mobile"'.($float ? $float : '').'><a target="_blank" rel="noopener" class="emlanlist-link" href="'.esc_url($meta['bestill']).'"><svg class="emlanlist-svg" version="1.1" x="0px" y="0px" width="26px" height="20px" viewBox="0 0 26 20" enable-background="new 0 0 24 24" xml:space="preserve"><path fill="none" d="M0,0h24v24H0V0z"/><path class="emlanlist-thumb" d="M1,21h4V9H1V21z M23,10c0-1.1-0.9-2-2-2h-6.31l0.95-4.57l0.03-0.32c0-0.41-0.17-0.79-0.44-1.06L14.17,1L7.59,7.59C7.22,7.95,7,8.45,7,9v10c0,1.1,0.9,2,2,2h9c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,12.5,23,12.26,23,12V10z"/></svg> Ansök här!</a></div>';
 		return $html;
 	}
@@ -225,7 +233,7 @@ final class Lanlist_shortcode {
 	 * @param  WP_Post $posts a wp post object
 	 * @return [html]        html list of loans
 	 */
-	private function get_html($posts, $source = null) {
+	private function get_html($posts, $atts) {
 		$html = '<ul class="emlanlist-ul">';
 
 		foreach ($posts as $p) {
@@ -236,18 +244,26 @@ final class Lanlist_shortcode {
 			if (isset($meta[0])) $meta = $meta[0];
 			else continue;
 
+			// if ($meta['pixel']) {
+			// 	if ($source) $meta['pixel'] = $this->add_source($meta['pixel'], $source);
+			// 	$html .= $this->add_pixel($meta['pixel']);
+			// }
+
+			
+			// if ($source && $meta['bestill']) $meta['bestill'] = $this->add_source($meta['bestill'], $source);
+
+			// grid container
+			$html .= '<li class="emlanlist-container">';
+
+			if ($meta['qstring']) $meta['bestill'] = $this->add_query_string($meta['bestill'], $atts['source'], $atts['page']);
+
 			if ($meta['pixel']) {
-				if ($source) $meta['pixel'] = $this->add_source($meta['pixel'], $source);
-				$html .= $this->add_pixel($meta['pixel']);
+				if ($meta['qstring']) $html .= $this->add_pixel($this->add_query_string($meta['pixel'], $atts['source'], $atts['page']));
+				else $html .= $this->add_pixel($meta['pixel']);
 			}
 
 			// sanitize meta
 			$meta = $this->esc_kses($meta);
-			
-			if ($source && $meta['bestill']) $meta['bestill'] = $this->add_source($meta['bestill'], $source);
-
-			// grid container
-			$html .= '<li class="emlanlist-container">';
 
 			// title
 			$html .= '<div class="emlanlist-title-container"><a class="emlanlist-title" href="'.$meta['readmore'].'">'.wp_kses_post($p->post_title).'</a></div>';
@@ -350,6 +366,14 @@ final class Lanlist_shortcode {
 		return $html;
 	}
 
+
+
+
+
+
+
+
+
 	private function add_pixel($pixel) {
 		if ($this->pixels[$pixel]) return '';
 
@@ -357,6 +381,90 @@ final class Lanlist_shortcode {
 
 		return '<img width=0 height=0 src="'.esc_url($pixel).'" style="position:absolute">';
 	}
+
+
+
+
+
+
+
+
+
+
+	private function add_query_string($link = null, $source = null, $page = null) {
+		
+		$axo = [
+			'page' => 'aff_sub2',
+			'source' => 'source',
+			'click_id' => 'aff_click_id',
+			'type' => 'aff_sub'
+		];
+
+		$adservice = [
+			'page' => 'sub'
+		];
+
+		if (strpos($link, 'axo') !== false) $def = $axo;
+		elseif (strpos($link, 'adservice') !== false) $def = $adservice;
+		else $def = $axo; // axo is currently default
+
+		// parsing given url for query string
+		parse_str(parse_url($link)['query'], $url_query);
+
+		// parsing current url for query string
+		parse_str($_SERVER['QUERY_STRING'], $result);
+		// wp_die('<xmp>'.print_r($url_query, true).'</xmp>');
+		
+		// source
+		if ($def['source']) {
+			if ($source) $result[$def['source']] = $source;
+			// elseif ($url_query[$def['source']]) $result[$def['source']] = $url_query[$def['source']];
+			elseif (!$url_query[$def['source']]) $result[$def['source']] = $_SERVER['SERVER_NAME'];
+		}
+
+
+		// page (aff_sub2)
+		if ($def['page']) {
+			global $post;
+			// global $pagename;
+			if ($page) $result[$def['page']] = $page;
+			// elseif ($url_query[$def['page']]) $result[$def['page']] = $url_query[$def['page']]; 
+			elseif (!$url_query[$def['page']]) $result[$def['page']] = $post->post_name;
+		}
+			// wp_die('<xmp>'.print_r($result, true).'</xmp>');
+		// aff_sub 
+		// aff_click_id
+		// from google ad, bing ad or organic
+		if ($def['type']) {
+		$result[$def['type']] = 'organic';
+		foreach($result as $key => $value)
+			switch ($key) {
+				case 'gclid': 
+					$result[$def['type']] = 'google'; 
+					$result[$def['click_id']] = $value;
+					break;
+				case 'msclkid': 
+					$result[$def['type']] = 'bing'; 
+					$result[$def['click_id']] = $value;
+					break;
+			}
+		// removing google ad and bing ad parameter
+		}
+			unset($result['gclid']);
+			unset($result['msclkid']);
+
+		return add_query_arg($result, $link);
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 	/**
@@ -387,19 +495,30 @@ final class Lanlist_shortcode {
 		return $data;
 	}
 
-	private function add_source($meta, $source) {
+	// private function add_source($meta, $source) {
 
-		// removing current source
-		if (preg_match('/(?:(?!\?|&))(?:source=.*?)(?:(&|$))/', $meta, $matches))
-			$meta = str_replace($matches[0], '', $meta); 
-		$meta = preg_replace('/\?$/', '', $meta);
+	// 	// removing current source
+	// 	if (preg_match('/(?:(?!\?|&))(?:source=.*?)(?:(&|$))/', $meta, $matches))
+	// 		$meta = str_replace($matches[0], '', $meta); 
+	// 	$meta = preg_replace('/\?$/', '', $meta);
 
-		// adding source
-		if (strpos($meta, '?') !== false) $meta .= '&source=' . $source;
-		else $meta .= '?source=' . $source;
+	// 	// adding source
+	// 	if (strpos($meta, '?') !== false) $meta .= '&source=' . $source;
+	// 	else $meta .= '?source=' . $source;
 
-		return $meta;
-	}
+	// 	return $meta;
+	// }
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	 * kisses the data

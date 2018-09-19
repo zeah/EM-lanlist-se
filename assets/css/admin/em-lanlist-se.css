@@ -20,7 +20,9 @@
 .emlanlistse-input-title {
 	font-size: 16px;
 }
-
+.emlanlistse-input-container input[type=checkbox]{
+	width: auto;
+}
 /* overview window */
 
 #myTable2 {

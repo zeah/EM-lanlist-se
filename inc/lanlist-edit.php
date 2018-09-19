@@ -172,8 +172,8 @@ final class Lanlist_edit {
 		);
 		
 		/* adding admin css and js */
-		wp_enqueue_style('em-lanlist-se-admin-style', LANLIST_SE_PLUGIN_URL . 'assets/css/admin/em-lanlist-se.css', array(), '1.0.1');
-		wp_enqueue_script('em-lanlist-se-admin', LANLIST_SE_PLUGIN_URL . 'assets/js/admin/em-lanlist-se.js', array(), '1.0.1', true);
+		wp_enqueue_style('em-lanlist-se-admin-style', LANLIST_SE_PLUGIN_URL . 'assets/css/admin/em-lanlist-se.css', array(), '1.0.2');
+		wp_enqueue_script('em-lanlist-se-admin', LANLIST_SE_PLUGIN_URL . 'assets/js/admin/em-lanlist-se.js', array(), '1.0.2', true);
 	}
 
 
